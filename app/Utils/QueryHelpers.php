@@ -44,8 +44,8 @@ class QueryHelpers
             }
         } else {
 
-            $data = $model;
-            $dataCount = $model;
+            // $data = $model;
+            // $dataCount = $model;
 
             foreach ((array)$model::$searchable as $searchableFieldName) {
 

@@ -57,7 +57,7 @@ class ModuleController extends Controller
             return response()->json([
                 'success' => false,
                 'body' => $validators->errors(),
-                'message' => __('messages.failed.post'),
+                'message' => 'Failed to store data',
             ], 400);
         }
 
@@ -70,7 +70,7 @@ class ModuleController extends Controller
         return response()->json([
             'success' => true,
             'body' => null,
-            'message' => __('messages.success.post'),
+            'message' => 'Successfully update data',
         ]);
     }
 
@@ -86,7 +86,7 @@ class ModuleController extends Controller
             return response()->json([
                 'success' => false,
                 'body' => $validators->errors(),
-                'message' => __('messages.failed.put'),
+                'message' => 'Failed to update data',
             ], 400);
         }
 
@@ -96,7 +96,7 @@ class ModuleController extends Controller
             return response()->json([
                 'success' => false,
                 'body' => null,
-                'message' => __('messages.failed.put'),
+                'message' => 'Failed to update data',
             ], 400);
         }
 
@@ -109,7 +109,7 @@ class ModuleController extends Controller
         return response()->json([
             'success' => true,
             'body' => null,
-            'message' => __('messages.success.post'),
+            'message' => 'Successfully update data',
         ]);
     }
 
@@ -121,7 +121,7 @@ class ModuleController extends Controller
             return response()->json([
                 'success' => false,
                 'body' => null,
-                'message' => __('messages.failed.delete'),
+                'message' => 'Failed to delete data',
             ], 400);
         }
 

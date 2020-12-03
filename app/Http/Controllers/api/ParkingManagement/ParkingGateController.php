@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\api\UserManagement;
+namespace App\Http\Controllers\api\ParkingManagement;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use App\Models\Gate;
 use App\Utils\QueryHelpers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class RoleController extends Controller
+class ParkingGateController extends Controller
 {
     public function getAll(Request $request)
     {
-        $rawData = QueryHelpers::getData($request, new Role());
+        $rawData = QueryHelpers::getData($request, new Gate());
 
         return response()->json([
             'success' => true,
@@ -29,7 +29,7 @@ class RoleController extends Controller
 
     public function getOne(Request $request, $id)
     {
-        $data = QueryHelpers::getOneById($id, $request, new Role());
+        $data = QueryHelpers::getOneById($id, $request, new Gate());
 
         if (empty($data)) {
             return response()->json([
@@ -62,7 +62,7 @@ class RoleController extends Controller
             ], 400);
         }
 
-        $data = new Role();
+        $data = new Gate();
         $data->name = $request->name;
         $data->display_name = $request->display_name;
         $data->description = $request->description;
@@ -71,7 +71,7 @@ class RoleController extends Controller
         return response()->json([
             'success' => true,
             'body' => null,
-            'message' => 'Successfully update data',
+            'message' => 'Successfully store data',
         ]);
     }
 
@@ -91,7 +91,7 @@ class RoleController extends Controller
             ], 400);
         }
 
-        $data = QueryHelpers::getOneById($id, $request, new Role());
+        $data = QueryHelpers::getOneById($id, $request, new Gate());
 
         if (empty($data)) {
             return response()->json([
@@ -134,7 +134,7 @@ class RoleController extends Controller
 
         try {
 
-            $data = QueryHelpers::getOneById($id, $request, new Role());
+            $data = QueryHelpers::getOneById($id, $request, new Gate());
 
             if (empty($data)) {
                 return response()->json([
@@ -192,7 +192,7 @@ class RoleController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $data = QueryHelpers::getOneById($id, $request, new Role());
+        $data = QueryHelpers::getOneById($id, $request, new Gate());
 
         if (empty($data)) {
             return response()->json([
