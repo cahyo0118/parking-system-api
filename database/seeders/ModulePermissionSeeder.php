@@ -88,7 +88,7 @@ class ModulePermissionSeeder extends Seeder
                     if (empty($permissionData)) {
                         $permissionData = new Permission();
                         $permissionData->module_id = $moduleData->id;
-                        $permissionData->name = $permission;
+                        $permissionData->name = $module['name'] . '-' . $permission;
                         $permissionData->display_name = $permission;
                         $permissionData->save();
                     }

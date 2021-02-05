@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,6 +42,12 @@ class AuthController extends Controller
             ], 400);
         }
 
+        $permissions = Permission::whereIn(
+            'id',
+            DB::table('role_permission')->whereIn('role_id', $user->roles()->pluck('role_id'))->pluck('permission_id')
+        )->pluck('name');
+
+
         /*Register to Auth Service Provider*/
         Auth::guard('api')->login($user);
         $auth = auth('api')->user();
@@ -55,6 +63,7 @@ class AuthController extends Controller
                     'expires_in' => auth('api')->factory()->getTTL() * 60,
                 ],
                 'user' => $user,
+                'permissions' => $permissions,
             ],
             'message' => 'Successfully logged in',
         ]);

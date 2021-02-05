@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\UserManagement;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Utils\QueryHelpers;
 use Exception;
@@ -157,15 +158,15 @@ class RoleController extends Controller
             } else {
                 // $role_permissions = [];
 
-                // $permissions = Permission::all();
+                $permissions = Permission::all();
 
-                // foreach ($permissions as $permission) {
-                //     $role_permissions[$permission['id']] = ['module_id' => $permission['module_id']];
-                // }
+                foreach ($permissions as $permission) {
+                    $role_permissions[$permission['id']] = ['module_id' => $permission['module_id']];
+                }
 
                 // error_log(json_encode($role_permissions));
 
-                // $data->permissions()->attach($role_permissions);
+                $data->permissions()->attach($role_permissions);
 
                 $data->is_permit_all = true;
                 $data->save();

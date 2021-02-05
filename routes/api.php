@@ -38,6 +38,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::put('/{id}/update', [UserController::class, 'update']);
 
         Route::delete('/{id}/delete', [UserController::class, 'delete']);
+
+        Route::put('/{id}/add-role/{role_id}', [UserController::class, 'addRole']);
+
+        Route::put('/{id}/remove-role/{role_id}', [UserController::class, 'removeRole']);
     });
 
     Route::group(['prefix' => 'roles'], function () {

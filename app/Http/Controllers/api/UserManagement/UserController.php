@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api\UserManagement;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use App\Utils\QueryHelpers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -49,7 +51,8 @@ class UserController extends Controller
 
         $validators = Validator::make($request->all(), [
             "name" => "required",
-            "display_name" => "required",
+            "email" => "required",
+            "password" => "required",
         ]);
 
         if ($validators->fails()) {
@@ -62,8 +65,8 @@ class UserController extends Controller
 
         $data = new User();
         $data->name = $request->name;
-        $data->display_name = $request->display_name;
-        $data->description = $request->description;
+        $data->email = $request->email;
+        $data->password = Hash::make($request->password);
         $data->save();
 
         return response()->json([
@@ -78,7 +81,8 @@ class UserController extends Controller
 
         $validators = Validator::make($request->all(), [
             "name" => "required",
-            "display_name" => "required",
+            "email" => "required",
+            "password" => "required",
         ]);
 
         if ($validators->fails()) {
@@ -100,8 +104,8 @@ class UserController extends Controller
         }
 
         $data->name = $request->name;
-        $data->display_name = $request->display_name;
-        $data->description = $request->description;
+        $data->email = $request->email;
+        $data->password = Hash::make($request->password);
 
         $data->save();
 
@@ -130,6 +134,70 @@ class UserController extends Controller
             'success' => true,
             'body' => $data,
             'message' => __('messages.success.delete'),
+        ]);
+    }
+
+    public function addRole(Request $request, $id, $role_id)
+    {
+        $data = QueryHelpers::getOneById($id, $request, new User());
+
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'body' => null,
+                'message' => 'Failed update data',
+            ], 400);
+        }
+
+        $role = QueryHelpers::getOneById($role_id, $request, new Role());
+
+        if (empty($role)) {
+            return response()->json([
+                'success' => false,
+                'body' => null,
+                'message' => 'Failed update data, role not found',
+            ], 400);
+        }
+
+        if (empty($data->roles()->where('role_id', $role_id)->first())) {
+            $data->roles()->attach($role_id);
+        }
+
+        return response()->json([
+            'success' => true,
+            'body' => $data,
+            'message' => 'Successfully update data',
+        ]);
+    }
+
+    public function removeRole(Request $request, $id, $role_id)
+    {
+        $data = QueryHelpers::getOneById($id, $request, new User());
+
+        if (empty($data)) {
+            return response()->json([
+                'success' => false,
+                'body' => null,
+                'message' => 'Failed update data',
+            ], 400);
+        }
+
+        $role = QueryHelpers::getOneById($role_id, $request, new Role());
+
+        if (empty($role)) {
+            return response()->json([
+                'success' => false,
+                'body' => null,
+                'message' => 'Failed update data, role not found',
+            ], 400);
+        }
+
+        $data->roles()->detach($role_id);
+
+        return response()->json([
+            'success' => true,
+            'body' => $data,
+            'message' => 'Successfully update data',
         ]);
     }
 }
